@@ -1,0 +1,4 @@
+url,address,name,online_order,book_table,rate,votes,phone,location,rest_type,dish_liked,cuisines,approx_cost(for two people),reviews_list,menu_item,listed_in(type),listed_in(city)
+https://example.com/r1,123 Main St,Restaurant A,Yes,Yes,4.5/5,100,1234567890,Banashankari,Casual Dining,Pasta,Pizza Italian,600,[],[],Cafes,Banashankari
+https://example.com/r2,456 Park Ave,Restaurant B,No,No,3.8/5,50,0987654321,Indiranagar,Cafe,Biryani,North Indian,800,[],[],Buffet,Indiranagar
+https://example.com/r3,789 Garden Rd,Restaurant C,Yes,Yes,4.2/5,200,1122334455,Koramangala,Casual Dining,Dosa,South Indian,400,[],[],Delivery,Koramangala

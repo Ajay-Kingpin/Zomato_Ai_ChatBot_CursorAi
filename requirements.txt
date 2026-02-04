@@ -1,0 +1,10 @@
+# Phase 1 - Data ingestion
+pandas>=2.0.0
+datasets>=2.14.0
+huggingface_hub>=0.17.0
+
+# Phase 4 - Groq LLM
+groq>=0.4.0
+
+# Testing
+pytest>=7.4.0
