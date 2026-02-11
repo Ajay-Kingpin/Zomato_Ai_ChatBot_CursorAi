@@ -15,10 +15,10 @@ from dotenv import load_dotenv
 
 # Load environment variables with error handling
 try:
-    load_dotenv(project_root / "phase4" / ".env")
+    load_dotenv(project_root / "phase4_LLMRecommendation" / ".env")
 except Exception:
     import os
-    os.environ["GROQ_API_KEY"] = "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"
+    os.environ["GOOGLE_STUDIO_API_KEY"] = "AIzaSyArJ-GUufO3vFaOYjzONmfwCu5vpcQU3r8"
 
 import pandas as pd
 from phase1_DataLoading.data_loader import ZomatoDataLoader

@@ -1,10 +1,8 @@
 # Phase 1 - Data ingestion
 pandas>=2.0.0
-datasets>=2.14.0
-huggingface_hub>=0.17.0
 
-# Phase 4 - Groq LLM
-groq>=0.4.0
+# Phase 4 - Google Studio AI
+requests>=2.31.0
 python-dotenv>=1.0.0
 
 # Phase 6 - Web Frontend

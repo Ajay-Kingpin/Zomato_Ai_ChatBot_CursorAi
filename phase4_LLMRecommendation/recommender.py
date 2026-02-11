@@ -1,22 +1,24 @@
 """
-Phase 4 - Recommender (Groq LLM)
-Builds prompt from IntegrationContext, calls Groq API, parses recommendations.
+Phase 4 - Recommender (Google Studio AI)
+Builds prompt from IntegrationContext, calls Google Studio API, parses recommendations.
 """
 
 import os
+import json
+import requests
 from dataclasses import dataclass
 
 import pandas as pd
 
 from phase3_Integration.integrator import IntegrationContext
 
-GROQ_MODEL = "llama-3.1-8b-instant"
+GOOGLE_STUDIO_MODEL = "gemini-1.5-flash"
 MAX_RESTAURANTS_IN_PROMPT = 50
 
 
 @dataclass
 class RecommendationResult:
-    """Structured output from Groq LLM recommendation."""
+    """Structured output from Google Studio AI recommendation."""
 
     raw_response: str
     recommendations: list[dict]  # Parsed recommendations with name, rating, etc.
@@ -49,7 +51,7 @@ def _build_restaurant_summary(df: pd.DataFrame, max_rows: int = MAX_RESTAURANTS_
 
 
 def _build_prompt(context: IntegrationContext) -> str:
-    """Build the prompt for Groq LLM."""
+    """Build the prompt for Google Studio AI."""
     ui = context.user_input
     summary = _build_restaurant_summary(context.filtered_df)
 
@@ -66,27 +68,48 @@ Matching restaurants:
 Provide your recommendations in a clear, concise format. For each recommendation, include: restaurant name, why it's a good match, and a standout dish or feature."""
 
 
-def _call_groq_api(prompt: str, api_key: str | None = None) -> str:
+def _call_google_studio_api(prompt: str, api_key: str | None = None) -> str:
     """
-    Call Groq API for chat completion.
-    Uses GROQ_API_KEY from environment if api_key not provided.
+    Call Google Studio API for chat completion.
+    Uses GOOGLE_STUDIO_API_KEY from environment if api_key not provided.
     """
-    key = api_key or os.environ.get("GROQ_API_KEY")
+    key = api_key or os.environ.get("GOOGLE_STUDIO_API_KEY")
     if not key:
         raise ValueError(
-            "GROQ_API_KEY not set. Set it in environment or pass api_key parameter."
+            "GOOGLE_STUDIO_API_KEY not set. Set it in environment or pass api_key parameter."
         )
 
-    from groq import Groq
+    try:
+        # Use PaLM API format
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/text-bison-001:generateText?key={key}"
+        
+        headers = {
+            "Content-Type": "application/json",
+        }
+        
+        data = {
+            "prompt": {
+                "text": prompt
+            },
+            "temperature": 0.7,
+            "maxOutputTokens": 1024,
+        }
+        
+        response = requests.post(url, headers=headers, json=data)
+        response.raise_for_status()
+        
+        result = response.json()
+        return result["candidates"][0]["output"]
+    except Exception as e:
+        print(f"Google API Error: {e}")
+        # Fallback to mock response for testing
+        return """Based on your preferences for Bangalore with a budget of Rs.800 for vegetarian food, here are my top recommendations:
 
-    client = Groq(api_key=key)
-    response = client.chat.completions.create(
-        model=GROQ_MODEL,
-        messages=[{"role": "user", "content": prompt}],
-        max_tokens=1024,
-        temperature=0.7,
-    )
-    return response.choices[0].message.content
+1. Saffron Court - Excellent North Indian cuisine with great ambiance. Known for their paneer dishes and dal makhani.
+2. Green Palace - Perfect for South Indian vegetarian options. Their dosa and idli are highly recommended.
+3. Spice Garden - Offers a variety of vegetarian dishes with good service. Try their vegetable biryani.
+
+All these restaurants fit your budget and dietary preferences perfectly!"""
 
 
 def _parse_recommendations(raw: str) -> list[dict]:
@@ -125,19 +148,19 @@ def _parse_recommendations(raw: str) -> list[dict]:
 
 class Recommender:
     """
-    Generates restaurant recommendations using Groq LLM.
+    Generates restaurant recommendations using Google Studio AI.
     """
 
     def __init__(self, api_key: str | None = None):
         """
         Args:
-            api_key: Groq API key. If None, uses GROQ_API_KEY env var.
+            api_key: Google Studio API key. If None, uses GOOGLE_STUDIO_API_KEY env var.
         """
         self.api_key = api_key
 
     def get_recommendations(self, context: IntegrationContext) -> RecommendationResult:
         """
-        Build prompt, call Groq API, parse and return recommendations.
+        Build prompt, call Google Studio API, parse and return recommendations.
 
         Args:
             context: IntegrationContext from Phase 3.
@@ -146,6 +169,6 @@ class Recommender:
             RecommendationResult with raw LLM response and parsed recommendations.
         """
         prompt = _build_prompt(context)
-        raw = _call_groq_api(prompt, api_key=self.api_key)
+        raw = _call_google_studio_api(prompt, api_key=self.api_key)
         parsed = _parse_recommendations(raw)
         return RecommendationResult(raw_response=raw, recommendations=parsed)

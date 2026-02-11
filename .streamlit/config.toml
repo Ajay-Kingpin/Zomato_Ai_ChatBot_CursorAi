@@ -1,0 +1,33 @@
+# Zomato AI Recommendation System - Streamlit Configuration
+
+## Environment Variables
+GOOGLE_STUDIO_API_KEY=AIzaSyArJ-GUufO3vFaOYjzONmfwCu5vpcQU3r8
+
+## App Configuration
+[app]
+name = "Zomato AI Recommendation System"
+url = "https://your-username-zomato-recommendation.streamlit.app"
+
+## Deployment Settings
+[server]
+headless = true
+port = 8501
+
+## Zomato Sushi Design System Theme
+[theme]
+primaryColor = "#E23744"
+backgroundColor = "#F8F8F8"
+secondaryBackgroundColor = "#FFFFFF"
+textColor = "#1C1C1C"
+font = "sans serif"
+
+## Custom CSS Variables
+[custom]
+zomatoRed = "#E23744"
+zomatoDark = "#1C1C1C"
+zomatoGray = "#696969"
+zomatoLightGray = "#F8F8F8"
+zomatoWhite = "#FFFFFF"
+zomatoGreen = "#48C479"
+zomatoOrange = "#FF6B35"
+zomatoBlue = "#2E86AB"

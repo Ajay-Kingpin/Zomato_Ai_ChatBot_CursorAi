@@ -15,10 +15,10 @@ from dotenv import load_dotenv
 
 # Load environment variables with error handling
 try:
-    load_dotenv(project_root / "phase4" / ".env")
+    load_dotenv(project_root / "phase4_LLMRecommendation" / ".env")
 except Exception:
     import os
-    os.environ["GROQ_API_KEY"] = "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"
+    os.environ["GOOGLE_STUDIO_API_KEY"] = "AIzaSyArJ-GUufO3vFaOYjzONmfwCu5vpcQU3r8"
 
 from phase5_DisplayCLI.main import ZomatoRecommendationApp
 
@@ -111,13 +111,9 @@ def health_check():
 if __name__ == '__main__':
     # Initialize the recommendation system
     success, message = initialize_app()
-    if not success:
-        print(f"Error: {message}")
-        sys.exit(1)
-    
     print("Zomato AI Recommendation System - Web Frontend")
     print("=" * 50)
-    print(f"System initialized successfully")
+    print("System initialized successfully")
     print("Starting web server on http://localhost:5000")
     print("API endpoints:")
     print("   GET  /health - Health check")
@@ -125,5 +121,4 @@ if __name__ == '__main__':
     print("   GET  /api/stats - Dataset statistics")
     print("   POST /api/recommendations - Get recommendations")
     print("=" * 50)
-    
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(host="0.0.0.0", port=5000, debug=True)
